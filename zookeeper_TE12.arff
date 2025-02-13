@@ -1,0 +1,12 @@
+@relation zookeeper_TE12
+@attribute SIZE numeric
+@attribute NR numeric
+@attribute N_AUTH numeric
+@attribute LOC_ADDED numeric
+@attribute MAX_LOC_ADDED numeric
+@attribute AVG_LOC_ADDED numeric
+@attribute CHURN numeric
+@attribute MAX_CHURN numeric
+@attribute AVG_CHURN numeric
+@attribute IS_BUGGY {'true', 'false'}
+@data
