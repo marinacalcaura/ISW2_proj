@@ -25,9 +25,6 @@ public class ExecutionFlow {
         ReleaseInfo releaseInfo = new ReleaseInfo(projectName);
         List<Release> releaseList = releaseInfo.getReleases();
 
-        /*for (Release rel : releaseList){
-            System.out.println(rel.getReleaseId());
-        }*/
 
         //ottengo la lista dei ticket
         RetrieveTickets retrieveTickets = new RetrieveTickets(projectName);
@@ -55,20 +52,6 @@ public class ExecutionFlow {
         WekaInfo wekaInfo = new WekaInfo(projectName, (lastReleaseId / 2) - 1);
         EvaluationResults evaluationResults = wekaInfo.retrieveClassifiersEvaluation();
 
-        // Stampa i risultati medi della valutazione
-        System.out.println("=== Valutazioni Medie ===");
-        evaluationResults.getAvgEvaluationsList().forEach(avgEval -> {
-            System.out.println("Classificatore: " + avgEval.getClassifier());
-            System.out.println("Precisione media: " + avgEval.getPrecision());
-            System.out.println("Recall media: " + avgEval.getRecall());
-            System.out.println("AUC medio: " + avgEval.getAuc());
-            System.out.println("Kappa medio: " + avgEval.getKappa());
-            System.out.println("NPofb: " + avgEval.getNpofb());
-
-            System.out.println("--------------------------------");
-        });
-
-        System.out.println("Numero totale di valutazioni: " + evaluationResults.getMergeEvaluationsList().size());
 
         // Genera i report della valutazione
         new EvaluationReport(projectName, evaluationResults.getAvgEvaluationsList(), "avg").generateReport();

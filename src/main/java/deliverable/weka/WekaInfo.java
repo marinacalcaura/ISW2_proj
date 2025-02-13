@@ -20,8 +20,6 @@ import weka.filters.supervised.instance.SpreadSubsample;
 
 import java.util.*;
 
-import static deliverable.acume.AcumeInfo.computeNpofb;
-
 public class WekaInfo {
 
     private static final String RANDOM_FOREST = "Random Forest";
@@ -84,7 +82,7 @@ public class WekaInfo {
             simpleRandomForest.setFp(eval.numFalsePositives(0));
             simpleRandomForest.setTn(eval.numTrueNegatives(0));
             simpleRandomForest.setFn(eval.numFalseNegatives(0));
-            simpleRandomForest.setNpofb(computeNpofb(projName,testing, randomForestClassifier));
+            simpleRandomForest.setNpofb(acumeInfo.computeNpofb(projName,testing, randomForestClassifier));
             simpleRandomForestList.add(simpleRandomForest);
 
             naiveBayesClassifier.buildClassifier(training);

@@ -4,7 +4,6 @@ import deliverable.entities.Acume;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 import weka.core.Instances;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.FileReader;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import static deliverable.files.DataExporter.acumeReport;
 
 public class AcumeInfo {
@@ -24,10 +22,9 @@ public class AcumeInfo {
         String currentDirectory = System.getProperty("user.dir");
         this.acumeScriptPath = Paths.get(currentDirectory, "ACUME/main.py").toString();
         this.acumeOutputPath = Paths.get(currentDirectory, "ACUME/EAM_NEAM_output.csv").toString();
-        System.out.println("Script path: " + acumeScriptPath);
-        System.out.println("CSV file path: " + acumeOutputPath);
+
     }
-    public static double computeNpofb(String projectName, Instances testing, Classifier classifier) throws Exception{
+    public double computeNpofb(String projectName, Instances testing, Classifier classifier) throws Exception{
         List<Acume> acumeInputList = prepareAcumeData(testing, classifier);
         acumeReport(projectName, acumeInputList);
 
