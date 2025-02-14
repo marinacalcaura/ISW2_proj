@@ -97,7 +97,7 @@ public class DataExporter {
             writer.println("@data");
 
             try (BufferedReader br = new BufferedReader(new FileReader(fileName + ".csv"))) {
-                br.readLine(); // Salta l'header
+                String header= br.readLine(); // Salta l'header
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",");
@@ -110,7 +110,7 @@ public class DataExporter {
             Files.deleteIfExists(Paths.get(fileName + ".csv"));
         }
     }
-    public static void acumeReport(String projName, List<Acume> acumeEntries) {
+    public static void acumeReport(List<Acume> acumeEntries) {
         Path outputDir = Paths.get("output", "acumeFiles");
         Path outputFile = outputDir.resolve("Acume.csv");
 
@@ -136,9 +136,9 @@ public class DataExporter {
                 }
             }
 
-            logger.log(Level.INFO, "File CSV creato con successo: " + outputFile.toAbsolutePath());
+            logger.info( "File CSV creato con successo: " + outputFile.toAbsolutePath());
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Errore durante la creazione del file CSV", e);
+            logger.severe( "Errore durante la creazione del file CSV");
         }
     }
 }

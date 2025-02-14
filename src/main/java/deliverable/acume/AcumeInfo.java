@@ -11,12 +11,16 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 import static deliverable.files.DataExporter.acumeReport;
 
 public class AcumeInfo {
     private static List<Acume> acumeInputList;
     private static String acumeScriptPath;
     private static String acumeOutputPath;
+
+    private static final Logger logger = Logger.getLogger(AcumeInfo.class.getName());
 
     public AcumeInfo() {
         String currentDirectory = System.getProperty("user.dir");
@@ -26,7 +30,7 @@ public class AcumeInfo {
     }
     public double computeNpofb(String projectName, Instances testing, Classifier classifier) throws Exception{
         List<Acume> acumeInputList = prepareAcumeData(testing, classifier);
-        acumeReport(projectName, acumeInputList);
+        acumeReport(acumeInputList);
 
         String scriptPath = "ACUME/main.py";
         String argument = "NPofB";
@@ -40,10 +44,8 @@ public class AcumeInfo {
         int lastAttrIndex= testing.numAttributes()-1;
         for(int i=0;i< testing.numInstances();i++) {
             Instance currInstance = testing.get(i);
-            //System.out.println("ISTANZA test:"+ currInstance.toString());
             double size = currInstance.value(0);
             double prediction = getPredictionTrue(currInstance, classifier);
-            //System.out.println("Prediction:" + prediction);
             boolean actual = currInstance.toString(lastAttrIndex).equals("true");
             Acume entry = new Acume(i, size, prediction, actual);
             acumeInputList.add(entry);
@@ -71,7 +73,6 @@ public class AcumeInfo {
             }
 
             double npofb = Double.parseDouble(npofbValue);
-            System.out.println("Valore ritornato da readNPOFB: " + npofb);
             return npofb;
 
         } catch (IOException e) {
@@ -122,9 +123,9 @@ public class AcumeInfo {
 
 
             if (exitCode == 0) {
-                System.out.println("Script Python eseguito con successo:\n" + output);
+                logger.info("Script Python eseguito con successo:\n" + output);
             } else {
-                System.err.println("Errore nell'esecuzione dello script Python (Exit Code: " + exitCode + ")\n" + output);
+                logger.severe("Errore nell'esecuzione dello script Python (Exit Code: " + exitCode + ")\n" + output);
                 throw new RuntimeException("Errore durante l'esecuzione dello script Python");
             }
 
@@ -150,7 +151,6 @@ public class AcumeInfo {
 
         for (int i = 0; i < predDist.length; i++) {
             if (inst.classAttribute().value(i).equals("true")) {
-                //System.out.println("predDist["+i+"] è :" + predDist[i]);
                 return predDist[i];
             }
         }

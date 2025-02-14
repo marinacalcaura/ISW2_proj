@@ -35,8 +35,8 @@ public class IterationProcessor {
     public void processIteration(int iteration, String projName, List<Release> releasesList, List<Ticket> ticketsList,
                                  List<Ticket> coldStartProjConsistentTickets, int lastReleaseID) throws IOException, GitAPIException, ParseException {
 
-        List<Release> iterReleasesList = releaseInfo.getFirstReleases(releasesList, iteration);
-        List<Ticket> iterTicketsList = retrieveTickets.getFirstTickets(ticketsList, iteration);
+        List<Release> iterReleasesList = ReleaseInfo.getFirstReleases(releasesList, iteration);
+        List<Ticket> iterTicketsList = RetrieveTickets.getFirstTickets(ticketsList, iteration);
         List<Ticket> consistentTicketsList = retrieveTickets.filterConsistentTickets(iterTicketsList, iterReleasesList);
 
         Double proportion;
@@ -69,7 +69,7 @@ public class IterationProcessor {
     }
 
     private static void generateCsvForReleases(String projectName, List<JavaClass> javaClasses, int lastReleaseId) throws IOException {
-        System.out.println("Inizio generazione dei file ARFF per le release...");
+
 
         for (int releaseId = 2; releaseId <= lastReleaseId; releaseId++) {
             List<JavaClass> filteredClasses = JavaClassUtils.getJavaClassesByRelease(javaClasses, releaseId);
@@ -82,7 +82,6 @@ public class IterationProcessor {
             }
         }
 
-        System.out.println("Generazione completata per tutte le release!");
     }
 
     private void processTestingPhase(String projName, int lastReleaseID, List<JavaClass> javaClassesList,

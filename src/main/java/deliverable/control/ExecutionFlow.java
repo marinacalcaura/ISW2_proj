@@ -3,6 +3,7 @@ package deliverable.control;
 import deliverable.entities.Release;
 import deliverable.entities.Ticket;
 import deliverable.files.EvaluationReport;
+import deliverable.github.RetrieveGitInfo;
 import deliverable.jira.ReleaseInfo;
 import deliverable.jira.RetrieveTickets;
 import deliverable.utils.EvaluationResults;
@@ -13,12 +14,14 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ExecutionFlow {
 
     private ExecutionFlow() {
         throw new IllegalStateException("Utility class");
     }
+    private static final Logger logger = Logger.getLogger(ExecutionFlow.class.getName());
 
     public static void analyzeProject(String projectName) throws Exception {
         //ottengo la lista delle release
@@ -43,7 +46,7 @@ public class ExecutionFlow {
                 try {
                     iterationProcessor.processIteration(i, projectName, releaseList, ticketList, coldStartTickets, lastReleaseId);
                 } catch (IOException | GitAPIException | ParseException e) {
-                    throw new RuntimeException("Errore durante il processamento dell'iterazione: " + i, e);
+                    logger.severe("Errore durante il processamento dell'iterazione: " + i + " - " + e.getMessage());
                 }
             }
         }

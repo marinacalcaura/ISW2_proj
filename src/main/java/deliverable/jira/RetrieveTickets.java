@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class RetrieveTickets {
     private String proj;
+    private static final Logger logger = Logger.getLogger(RetrieveTickets.class.getName());
 
     public RetrieveTickets(String projName){
         proj = projName.toUpperCase();
@@ -82,7 +84,8 @@ public class RetrieveTickets {
                         newTickets.add(ticket);
                     }
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                    logger.warning("Errore: " + e.getMessage());
+
                 }
             }
 

@@ -5,6 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
+
 import deliverable.entities.JavaClass;
 import deliverable.entities.Release;
 import deliverable.entities.ReleaseCommits;
@@ -33,6 +35,8 @@ public class RetrieveGitInfo {
     private final Git git;
     private final List<Ticket> ticketsWithAV;
     private final List<Release> releases;
+
+    private static final Logger logger = Logger.getLogger(RetrieveGitInfo.class.getName());
 
     public RetrieveGitInfo(String path, List<Ticket> ticketsList, List<Release> releasesList) throws IOException {
         this.repo = new FileRepository(path + "/.git");
@@ -77,6 +81,8 @@ public class RetrieveGitInfo {
             }
         } catch (GitAPIException | IOException e) {
 
+            logger.severe("Errore nel recupero dei commit dal branch " + branch.getName() + ": " + e.getMessage());
+
         }
         return commits;
     }
@@ -106,7 +112,7 @@ public class RetrieveGitInfo {
                 if (treeWalk.getPathString().endsWith(".java") && !treeWalk.getPathString().contains("/test/")) {
                     ObjectId objectId = treeWalk.getObjectId(0);
                     if (objectId == null) {
-                        System.out.println("Attenzione: impossibile ottenere l'ID dell'oggetto per " + treeWalk.getPathString());
+                        logger.info("Attenzione: impossibile ottenere l'ID dell'oggetto per " + treeWalk.getPathString());
                         continue;
                     }
                     ObjectLoader loader = repo.open(objectId);
@@ -138,7 +144,7 @@ public class RetrieveGitInfo {
         }
 
         if (matchingCommits.isEmpty()) {
-            System.out.println("Nessun commit valido per release " + release.getReleaseId());
+            logger.info("Nessun commit valido per release " + release.getReleaseId());
             return null;
         }
 
@@ -150,12 +156,12 @@ public class RetrieveGitInfo {
 
     public static Optional<Release> getReleaseOfCommit(RevCommit commit, List<ReleaseCommits> relCommAssociations) {
         if (commit == null) {
-            System.out.println("Errore: Il commit fornito è null!");
+            logger.info("Errore: Il commit fornito è null!");
             return Optional.empty();
         }
 
         if (relCommAssociations == null || relCommAssociations.isEmpty()) {
-            System.out.println("Attenzione: Lista relCommAssociations è vuota o null!");
+            logger.info("Attenzione: Lista relCommAssociations è vuota o null!");
             return Optional.empty();
         }
 
@@ -186,14 +192,13 @@ public class RetrieveGitInfo {
     public void getRelClassesAssociations(List<ReleaseCommits> relCommAssociations) throws IOException {
         for (ReleaseCommits relComm : relCommAssociations) {
             if (relComm == null || relComm.getLastCommit() == null) {
-                System.out.println("⚠ Nessun commit valido per release " + (relComm != null ? relComm.getRelease().getReleaseId() : "UNKNOWN"));
                 continue;
             }
 
             try {
                 relComm.setJavaClasses(getClasses(relComm.getLastCommit()));
             } catch (IOException ignored) {
-                System.err.println("Errore nel recupero delle classi per release " + relComm.getRelease().getReleaseId());
+                logger.info("Errore nel recupero delle classi per release " + relComm.getRelease().getReleaseId());
             }
         }
     }
@@ -208,7 +213,6 @@ public class RetrieveGitInfo {
 
             for (RevCommit commit : commitsList) {
                 if (commit == null) {
-                    System.out.println("ATTENZIONE: Commit nullo trovato, saltato.");
                     continue;
                 }
                 String comment = commit.getFullMessage();
@@ -220,14 +224,10 @@ public class RetrieveGitInfo {
                         !associatedCommits.contains(commit)) {
 
                     associatedCommits.add(commit);
-                    System.out.println("Commit associato al ticket: " + commit.getId().getName());
                 }
             }
         }
-        System.out.println("Lista finale di commit associati:");
-        for (RevCommit c : associatedCommits) {
-            System.out.println("✔ " + c.getId().getName());
-        }
+
         return associatedCommits;
     }
 
@@ -266,14 +266,12 @@ public class RetrieveGitInfo {
     private void doLabeling(List<JavaClass> javaClasses, Ticket ticket, List<ReleaseCommits> relCommAssociations) throws GitAPIException, IOException {
         List<RevCommit> commitsAssociatedWIssue = getTicketCommits(ticket);
 
-        System.out.println("Processing ticket: " + ticket.getTicketKey());
-        System.out.println("Number of associated commits: " + commitsAssociatedWIssue.size());
+
 
         for (RevCommit commit : commitsAssociatedWIssue) {
             Optional<Release> releaseOpt = getReleaseOfCommit(commit, relCommAssociations);
             if (releaseOpt.isPresent()) {
                 List<String> modifiedClasses = getModifiedClasses(commit);
-                System.out.println("Commit: " + commit.getName() + " | Release: " + releaseOpt.get().getReleaseId());
 
                 for (String modifClass : modifiedClasses) {
                     JavaClassUtils.markBuggyJavaClasses(javaClasses, modifClass, ticket.getInjectedVersion(), releaseOpt.get());
@@ -290,7 +288,7 @@ public class RetrieveGitInfo {
             try {
                 doLabeling(javaClasses, ticket, relCommAssociations);
             } catch (Exception e) {
-                System.err.println("Errore nell'etichettare il ticket: " + ticket.getTicketKey());
+                logger.info("Errore nell'etichettare il ticket: " + ticket.getTicketKey());
                 e.printStackTrace();
             }
         }

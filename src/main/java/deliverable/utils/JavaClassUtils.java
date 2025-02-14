@@ -4,13 +4,16 @@ import deliverable.entities.JavaClass;
 import deliverable.entities.Release;
 import deliverable.entities.ReleaseCommits;
 import deliverable.jira.ReleaseInfo;
+import deliverable.jira.RetrieveTickets;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class JavaClassUtils {
+    private static final Logger logger = Logger.getLogger(JavaClassUtils.class.getName());
 
 
     private JavaClassUtils() {
@@ -23,7 +26,7 @@ public class JavaClassUtils {
         for (ReleaseCommits relComm : relCommAssociations) {
             if (relComm != null) {
                 if (relComm.getJavaClasses() == null) {
-                    System.out.println("Attenzione: getJavaClasses() è null per la release " + relComm.getRelease().getReleaseId());
+                    logger.info("Attenzione: getJavaClasses() è null per la release " + relComm.getRelease().getReleaseId());
                 } else {
                     for (Map.Entry<String, String> entry : relComm.getJavaClasses().entrySet()) {
                         javaClasses.add(new JavaClass(entry.getKey(), entry.getValue(), relComm.getRelease()));
