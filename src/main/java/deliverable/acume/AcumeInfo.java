@@ -17,8 +17,8 @@ import static deliverable.files.DataExporter.acumeReport;
 
 public class AcumeInfo {
     private static List<Acume> acumeInputList;
-    private static String acumeScriptPath;
-    private static String acumeOutputPath;
+    private  String acumeScriptPath;
+    private  String acumeOutputPath;
 
     private static final Logger logger = Logger.getLogger(AcumeInfo.class.getName());
 
@@ -28,9 +28,9 @@ public class AcumeInfo {
         this.acumeOutputPath = Paths.get(currentDirectory, "ACUME/EAM_NEAM_output.csv").toString();
 
     }
-    public double computeNpofb(String projectName, Instances testing, Classifier classifier) throws Exception{
-        List<Acume> acumeInputList = prepareAcumeData(testing, classifier);
-        acumeReport(acumeInputList);
+    public double computeNpofb(Instances testing, Classifier classifier) throws Exception{
+        List<Acume> acumeInput = prepareAcumeData(testing, classifier);
+        acumeReport(acumeInput);
 
         String scriptPath = "ACUME/main.py";
         String argument = "NPofB";
@@ -54,29 +54,30 @@ public class AcumeInfo {
     }
     public static double readNpofb20(String acumeOutputPath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(acumeOutputPath))) {
-            //leggi la prima riga (intestazione del CSV)
+            // Leggi la prima riga (intestazione del CSV)
             String headerLine = reader.readLine();
             if (headerLine == null) {
-                throw new RuntimeException("Errore: il file CSV è vuoto.");
+                logger.severe("Errore: il file CSV è vuoto.");
+                return Double.NaN; // Valore di default
             }
 
-            //trova l'indice della colonna "Npofb20"
+            // Trova l'indice della colonna "Npofb20"
             int npofbIndex = findColumnIndex(headerLine, "Npofb20");
             if (npofbIndex == -1) {
-                throw new RuntimeException("Errore: colonna 'Npofb20' non trovata nel CSV.");
+                logger.severe("Errore: colonna 'Npofb20' non trovata nel CSV.");
+                return Double.NaN; // Valore di default
             }
-
 
             String npofbValue = getLastColumnValue(reader, npofbIndex);
             if (npofbValue.isEmpty()) {
-                throw new RuntimeException("Errore: il valore di NPOFB non è stato letto correttamente.");
+                logger.severe("Errore: il valore di NPOFB non è stato letto correttamente.");
+                return Double.NaN; // Valore di default
             }
 
             return Double.parseDouble(npofbValue);
-
-
-        } catch (IOException e) {
-            throw new RuntimeException("Errore nella lettura del file CSV", e);
+        } catch (IOException | NumberFormatException e) {
+            logger.severe("Errore nella lettura del file CSV: " + e.getMessage());
+            return Double.NaN; // Valore di default in caso di errore
         }
     }
 
@@ -102,7 +103,7 @@ public class AcumeInfo {
         return lastValue;
     }
 
-    public static void executePythonScript(String scriptPath, String argument) {
+    public static int executePythonScript(String scriptPath, String argument) {
         ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, argument);
         processBuilder.redirectErrorStream(true);  // Unifica stdout e stderr
 
@@ -113,7 +114,7 @@ public class AcumeInfo {
             StringBuilder output = new StringBuilder();
             String line;
 
-            //legge ogni riga dell'output e la salva in output
+            // Legge ogni riga dell'output e la salva in output
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
@@ -121,28 +122,27 @@ public class AcumeInfo {
             int exitCode = process.waitFor();
             reader.close();
 
-
             if (exitCode == 0) {
                 logger.info("Script Python eseguito con successo:\n" + output);
             } else {
                 logger.severe("Errore nell'esecuzione dello script Python (Exit Code: " + exitCode + ")\n" + output);
-                throw new RuntimeException("Errore durante l'esecuzione dello script Python");
             }
 
+            return exitCode;  // Restituisce il codice di uscita dello script Python
         } catch (IOException | InterruptedException e) {
+            logger.severe("Errore nell'invocazione dello script Python: " + e.getMessage());
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Errore nell'invocazione dello script Python", e);
+            return -1;  // Restituisce -1 in caso di errore
         }
     }
 
-    private static final Logger LOGGER = Logger.getLogger(AcumeInfo.class.getName());
 
     private static double getPredictionTrue(Instance inst, Classifier classifier) {
         try {
             double[] predDist = classifier.distributionForInstance(inst);
 
             if (predDist.length < inst.classAttribute().numValues()) {
-                LOGGER.warning("Errore: la distribuzione delle probabilità ha meno valori del previsto.");
+                logger.warning("Errore: la distribuzione delle probabilità ha meno valori del previsto.");
                 return -1;
             }
 
@@ -152,10 +152,10 @@ public class AcumeInfo {
                 }
             }
 
-            LOGGER.warning("Attenzione: la classe 'true' non è stata trovata.");
+            logger.warning("Attenzione: la classe 'true' non è stata trovata.");
             return -1;
         } catch (Exception e) {
-            LOGGER.severe("Errore durante il calcolo della distribuzione delle probabilità: " + e.getMessage());
+            logger.severe("Errore durante il calcolo della distribuzione delle probabilità: " + e.getMessage());
             return -1;
         }
     }

@@ -97,7 +97,7 @@ public class DataExporter {
 
             try (BufferedReader br = new BufferedReader(new FileReader(fileName + ".csv"))) {
 
-                br.readLine();
+                br.readLine(); //NOSONAR
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",");

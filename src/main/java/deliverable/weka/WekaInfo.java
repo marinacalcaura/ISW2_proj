@@ -82,7 +82,7 @@ public class WekaInfo {
             simpleRandomForest.setFp(eval.numFalsePositives(0));
             simpleRandomForest.setTn(eval.numTrueNegatives(0));
             simpleRandomForest.setFn(eval.numFalseNegatives(0));
-            simpleRandomForest.setNpofb(acumeInfo.computeNpofb(projName,testing, randomForestClassifier));
+            simpleRandomForest.setNpofb(acumeInfo.computeNpofb(testing, randomForestClassifier));
             simpleRandomForestList.add(simpleRandomForest);
 
             naiveBayesClassifier.buildClassifier(training);
@@ -97,7 +97,7 @@ public class WekaInfo {
             simpleNaiveBayes.setFp(eval.numFalsePositives(0));
             simpleNaiveBayes.setTn(eval.numTrueNegatives(0));
             simpleNaiveBayes.setFn(eval.numFalseNegatives(0));
-            simpleNaiveBayes.setNpofb(acumeInfo.computeNpofb(projName,testing, naiveBayesClassifier));
+            simpleNaiveBayes.setNpofb(acumeInfo.computeNpofb(testing, naiveBayesClassifier));
             simpleNaiveBayesList.add(simpleNaiveBayes);
 
             ibkClassifier.buildClassifier(training);
@@ -113,7 +113,7 @@ public class WekaInfo {
             simpleIBk.setFp(eval.numFalsePositives(0));
             simpleIBk.setTn(eval.numTrueNegatives(0));
             simpleIBk.setFn(eval.numFalseNegatives(0));
-            simpleIBk.setNpofb(acumeInfo.computeNpofb(projName,testing, ibkClassifier));
+            simpleIBk.setNpofb(acumeInfo.computeNpofb(testing, ibkClassifier));
             simpleIBkList.add(simpleIBk);
 
 
@@ -145,7 +145,7 @@ public class WekaInfo {
             featureSelRandomForest.setFp(eval.numFalsePositives(0));
             featureSelRandomForest.setTn(eval.numTrueNegatives(0));
             featureSelRandomForest.setFn(eval.numFalseNegatives(0));
-            featureSelRandomForest.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting, randomForestClassifier));
+            featureSelRandomForest.setNpofb(acumeInfo.computeNpofb(filteredTesting, randomForestClassifier));
             featureSelRandomForestList.add(featureSelRandomForest);
 
             naiveBayesClassifier.buildClassifier(filteredTraining);
@@ -160,7 +160,7 @@ public class WekaInfo {
             featureSelNaiveBayes.setFp(eval.numFalsePositives(0));
             featureSelNaiveBayes.setTn(eval.numTrueNegatives(0));
             featureSelNaiveBayes.setFn(eval.numFalseNegatives(0));
-            featureSelNaiveBayes.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting, naiveBayesClassifier));
+            featureSelNaiveBayes.setNpofb(acumeInfo.computeNpofb(filteredTesting, naiveBayesClassifier));
             featureSelNaiveBayesList.add(featureSelNaiveBayes);
 
             ibkClassifier.buildClassifier(filteredTraining);
@@ -175,7 +175,7 @@ public class WekaInfo {
             featureSelIBk.setFp(eval.numFalsePositives(0));
             featureSelIBk.setTn(eval.numTrueNegatives(0));
             featureSelIBk.setFn(eval.numFalseNegatives(0));
-            featureSelIBk.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting, ibkClassifier));
+            featureSelIBk.setNpofb(acumeInfo.computeNpofb(filteredTesting, ibkClassifier));
             featureSelIBkList.add(featureSelIBk);
 
 
@@ -200,7 +200,7 @@ public class WekaInfo {
             samplingRandomForest.setFp(eval.numFalsePositives(0));
             samplingRandomForest.setTn(eval.numTrueNegatives(0));
             samplingRandomForest.setFn(eval.numFalseNegatives(0));
-            samplingRandomForest.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting, randomForestClassifier));
+            samplingRandomForest.setNpofb(acumeInfo.computeNpofb(filteredTesting, randomForestClassifier));
             samplingRandomForestList.add(samplingRandomForest);
 
             fc.setClassifier(naiveBayesClassifier);
@@ -216,7 +216,7 @@ public class WekaInfo {
             samplingNaiveBayes.setFp(eval.numFalsePositives(0));
             samplingNaiveBayes.setTn(eval.numTrueNegatives(0));
             samplingNaiveBayes.setFn(eval.numFalseNegatives(0));
-            samplingNaiveBayes.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting, naiveBayesClassifier));
+            samplingNaiveBayes.setNpofb(acumeInfo.computeNpofb(filteredTesting, naiveBayesClassifier));
             samplingNaiveBayesList.add(samplingNaiveBayes);
 
             fc.setClassifier(ibkClassifier);
@@ -232,7 +232,7 @@ public class WekaInfo {
             samplingIBk.setFp(eval.numFalsePositives(0));
             samplingIBk.setTn(eval.numTrueNegatives(0));
             samplingIBk.setFn(eval.numFalseNegatives(0));
-            samplingIBk.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting, ibkClassifier));
+            samplingIBk.setNpofb(acumeInfo.computeNpofb(filteredTesting, ibkClassifier));
             samplingIBkList.add(samplingIBk);
 
             //FEATURE SELECTION WITH SENSITIVE LEARNING (CFN = 10*CFP)
@@ -258,7 +258,7 @@ public class WekaInfo {
             costSensRandomForest.setFp(eval.numFalsePositives(0));
             costSensRandomForest.setTn(eval.numTrueNegatives(0));
             costSensRandomForest.setFn(eval.numFalseNegatives(0));
-            costSensRandomForest.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting,randomForestClassifier));
+            costSensRandomForest.setNpofb(acumeInfo.computeNpofb(filteredTesting,randomForestClassifier));
             costSensRandomForestList.add(costSensRandomForest);
 
             csc.setClassifier(naiveBayesClassifier);
@@ -275,7 +275,7 @@ public class WekaInfo {
             costSensNaiveBayes.setFp(eval.numFalsePositives(0));
             costSensNaiveBayes.setTn(eval.numTrueNegatives(0));
             costSensNaiveBayes.setFn(eval.numFalseNegatives(0));
-            costSensNaiveBayes.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting, naiveBayesClassifier));
+            costSensNaiveBayes.setNpofb(acumeInfo.computeNpofb(filteredTesting, naiveBayesClassifier));
             costSensNaiveBayesList.add(costSensNaiveBayes);
 
             csc.setClassifier(ibkClassifier);
@@ -292,7 +292,7 @@ public class WekaInfo {
             costSensIBk.setFp(eval.numFalsePositives(0));
             costSensIBk.setTn(eval.numTrueNegatives(0));
             costSensIBk.setFn(eval.numFalseNegatives(0));
-            costSensIBk.setNpofb(acumeInfo.computeNpofb(projName,filteredTesting, ibkClassifier));
+            costSensIBk.setNpofb(acumeInfo.computeNpofb(filteredTesting, ibkClassifier));
             costSensIBkList.add(costSensIBk);
 
         }
