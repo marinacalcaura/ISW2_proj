@@ -28,7 +28,7 @@ public class ReleaseInfo {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String apiUrl = "https://issues.apache.org/jira/rest/api/latest/project/" + this.proj + "/version";
-        JSONObject jsonResponse = JSON.JsonObjectFromUrl(apiUrl);
+        JSONObject jsonResponse = JSON.jsonObjectFromUrl(apiUrl);
         JSONArray releaseArray = jsonResponse.getJSONArray("values");
 
         for (int i = 0; i < releaseArray.length(); i++) {

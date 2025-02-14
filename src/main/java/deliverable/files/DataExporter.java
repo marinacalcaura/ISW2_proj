@@ -23,7 +23,7 @@ public class DataExporter {
     private final List<JavaClass> javaClassesList;
 
 
-    private static final Logger logger = Logger.getLogger(EvaluationReport.class.getName());
+    private static final Logger logger = Logger.getLogger(DataExporter.class.getName());
 
     public DataExporter(String projectName, CsvNamesEnum csvType, int csvIndex, List<JavaClass> javaClassesList) {
         this.projectName = projectName;

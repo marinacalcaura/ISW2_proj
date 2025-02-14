@@ -53,7 +53,7 @@ public class RetrieveGitInfo {
     }
 
     //recupera tutti i commit da tutti i branch nel repository
-    public List<RevCommit> retrieveAllCommits() throws GitAPIException, IOException {
+    public List<RevCommit> retrieveAllCommits() throws GitAPIException{
         List<RevCommit> allCommits = new ArrayList<>();
         List<Ref> branches = git.branchList().setListMode(ListMode.ALL).call();
 

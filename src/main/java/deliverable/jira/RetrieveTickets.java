@@ -70,7 +70,7 @@ public class RetrieveTickets {
 
         do {
             String url = buildJiraQueryUrl(startAt, maxResults);
-            JSONObject jsonResponse = JSON.JsonObjectFromUrl(url);
+            JSONObject jsonResponse = JSON.jsonObjectFromUrl(url);
             JSONArray issuesArray = jsonResponse.getJSONArray("issues");
             totalResults = jsonResponse.getInt("total");
 

@@ -9,7 +9,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class Proportion {
     }
 
     //recupero i ticket consistenti dai progetti specificati sopra
-    public static List<Ticket> coldStartRetrieveConsistentIssues() throws JSONException, IOException, ParseException {
+    public static List<Ticket> coldStartRetrieveConsistentIssues() throws JSONException {
         List<Ticket> allConsistentTickets = new ArrayList<>();
         for (ProjectsEnum proj : ProjectsEnum.values()) {
             List<Ticket> projectTickets = retrieveProjectConsistentIssues(proj.toString());

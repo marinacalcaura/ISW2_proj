@@ -22,14 +22,14 @@ public class JSON {
         return content.toString();
     }
 
-    public static JSONArray JsonArrayFromUrl(String url) throws IOException, JSONException {
+    public static JSONArray jsonArrayFromUrl(String url) throws IOException, JSONException {
         try (InputStream inputStream = new URL(url).openStream();
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return new JSONArray(readAll(reader));
         }
     }
 
-    public static JSONObject JsonObjectFromUrl(String url) throws IOException, JSONException {
+    public static JSONObject jsonObjectFromUrl(String url) throws IOException, JSONException {
         try (InputStream inputStream = new URL(url).openStream();
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return new JSONObject(readAll(reader));
