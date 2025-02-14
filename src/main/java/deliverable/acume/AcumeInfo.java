@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static deliverable.files.DataExporter.acumeReport;
@@ -28,7 +29,7 @@ public class AcumeInfo {
         this.acumeOutputPath = Paths.get(currentDirectory, "ACUME/EAM_NEAM_output.csv").toString();
 
     }
-    public double computeNpofb(Instances testing, Classifier classifier) throws Exception{
+    public double computeNpofb(Instances testing, Classifier classifier){
         List<Acume> acumeInput = prepareAcumeData(testing, classifier);
         acumeReport(acumeInput);
 
@@ -38,7 +39,7 @@ public class AcumeInfo {
 
         return readNpofb20(acumeOutputPath);
     }
-    private static List<Acume> prepareAcumeData(Instances testing, Classifier classifier) throws Exception {
+    private static List<Acume> prepareAcumeData(Instances testing, Classifier classifier) {
         acumeInputList=new ArrayList<>();
 
         int lastAttrIndex= testing.numAttributes()-1;
@@ -123,9 +124,12 @@ public class AcumeInfo {
             reader.close();
 
             if (exitCode == 0) {
-                logger.info("Script Python eseguito con successo:\n" + output);
+                logger.log(Level.INFO, "Script Python eseguito con successo:\n{0}", output);
+
             } else {
-                logger.severe("Errore nell'esecuzione dello script Python (Exit Code: " + exitCode + ")\n" + output);
+                logger.log(Level.SEVERE, "Errore nell'esecuzione dello script Python (Exit Code: {0})\n{1}",
+                        new Object[]{exitCode, output});
+
             }
 
             return exitCode;  // Restituisce il codice di uscita dello script Python

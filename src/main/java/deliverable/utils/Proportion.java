@@ -1,6 +1,5 @@
 package deliverable.utils;
 
-import deliverable.acume.AcumeInfo;
 import deliverable.entities.Release;
 import deliverable.entities.Ticket;
 import deliverable.jira.ReleaseInfo;
