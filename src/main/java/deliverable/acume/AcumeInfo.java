@@ -127,8 +127,9 @@ public class AcumeInfo {
                 logger.log(Level.INFO, "Script Python eseguito con successo:\n{0}", output);
 
             } else {
-                logger.log(Level.SEVERE, "Errore nell'esecuzione dello script Python (Exit Code: {0})\n{1}",
+                logger.log(Level.SEVERE, "Errore nell''esecuzione dello script Python (Exit Code: {0})\n{1}",
                         new Object[]{exitCode, output});
+
 
             }
 
