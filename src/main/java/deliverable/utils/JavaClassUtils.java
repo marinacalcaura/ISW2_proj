@@ -4,7 +4,6 @@ import deliverable.entities.JavaClass;
 import deliverable.entities.Release;
 import deliverable.entities.ReleaseCommits;
 import deliverable.jira.ReleaseInfo;
-import deliverable.jira.RetrieveTickets;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.util.ArrayList;

@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DataExporter {
@@ -97,7 +96,8 @@ public class DataExporter {
             writer.println("@data");
 
             try (BufferedReader br = new BufferedReader(new FileReader(fileName + ".csv"))) {
-                String header= br.readLine(); // Salta l'header
+
+                br.readLine();
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(",");
@@ -136,7 +136,7 @@ public class DataExporter {
                 }
             }
 
-            logger.info( "File CSV creato con successo: " + outputFile.toAbsolutePath());
+
         } catch (IOException e) {
             logger.severe( "Errore durante la creazione del file CSV");
         }

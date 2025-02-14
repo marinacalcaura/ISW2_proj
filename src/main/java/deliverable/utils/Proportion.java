@@ -1,5 +1,6 @@
 package deliverable.utils;
 
+import deliverable.acume.AcumeInfo;
 import deliverable.entities.Release;
 import deliverable.entities.Ticket;
 import deliverable.jira.ReleaseInfo;
@@ -11,6 +12,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 public class Proportion {
@@ -29,6 +31,8 @@ public class Proportion {
     private Proportion() {
         throw new IllegalStateException("Utility class");
     }
+
+    private static final Logger logger = Logger.getLogger(Proportion.class.getName());
 
     //recupero i ticket consistenti dai progetti specificati sopra
     public static List<Ticket> coldStartRetrieveConsistentIssues() throws JSONException {
@@ -50,7 +54,7 @@ public class Proportion {
             List<Ticket> coldStartTickets = retrieveTickets.getTickets(coldStartReleases);
             return retrieveTickets.filterConsistentTickets(coldStartTickets, coldStartReleases);
         } catch (JSONException | IOException | ParseException e) {
-            System.err.println("Error retrieving issues for project: " + projectName);
+            logger.info("Error retrieving issues for project: " + projectName);
             return Collections.emptyList();
         }
     }

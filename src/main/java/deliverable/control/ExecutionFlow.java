@@ -3,7 +3,6 @@ package deliverable.control;
 import deliverable.entities.Release;
 import deliverable.entities.Ticket;
 import deliverable.files.EvaluationReport;
-import deliverable.github.RetrieveGitInfo;
 import deliverable.jira.ReleaseInfo;
 import deliverable.jira.RetrieveTickets;
 import deliverable.utils.EvaluationResults;

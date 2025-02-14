@@ -72,8 +72,8 @@ public class AcumeInfo {
                 throw new RuntimeException("Errore: il valore di NPOFB non è stato letto correttamente.");
             }
 
-            double npofb = Double.parseDouble(npofbValue);
-            return npofb;
+            return Double.parseDouble(npofbValue);
+
 
         } catch (IOException e) {
             throw new RuntimeException("Errore nella lettura del file CSV", e);
@@ -135,27 +135,29 @@ public class AcumeInfo {
         }
     }
 
-    private static double getPredictionTrue(Instance inst, Classifier classifier) throws Exception {
-        double[] predDist = classifier.distributionForInstance(inst);
+    private static final Logger LOGGER = Logger.getLogger(AcumeInfo.class.getName());
 
+    private static double getPredictionTrue(Instance inst, Classifier classifier) {
+        try {
+            double[] predDist = classifier.distributionForInstance(inst);
 
-        //System.out.println("Distribuzione delle probabilità: " + Arrays.toString(predDist));
-
-        //controlla se ci sono abbastanza classi nel modello
-        if (predDist.length < inst.classAttribute().numValues()) {
-            System.err.println("Errore: la distribuzione delle probabilità ha meno valori del previsto.");
-            System.err.println("PredDist length: " + predDist.length);
-            System.err.println("Numero di classi nel dataset: " + inst.classAttribute().numValues());
-            return -1; // Valore di default per evitare crash
-        }
-
-        for (int i = 0; i < predDist.length; i++) {
-            if (inst.classAttribute().value(i).equals("true")) {
-                return predDist[i];
+            if (predDist.length < inst.classAttribute().numValues()) {
+                LOGGER.warning("Errore: la distribuzione delle probabilità ha meno valori del previsto.");
+                return -1;
             }
-        }
 
-        throw new Exception("Errore: la classe 'true' non è stata trovata.");
+            for (int i = 0; i < predDist.length; i++) {
+                if (inst.classAttribute().value(i).equals("true")) {
+                    return predDist[i];
+                }
+            }
+
+            LOGGER.warning("Attenzione: la classe 'true' non è stata trovata.");
+            return -1;
+        } catch (Exception e) {
+            LOGGER.severe("Errore durante il calcolo della distribuzione delle probabilità: " + e.getMessage());
+            return -1;
+        }
     }
 
 }

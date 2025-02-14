@@ -257,7 +257,9 @@ public class RetrieveGitInfo {
                 }
             }
 
-        } catch (ArrayIndexOutOfBoundsException ignored) {}
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+            // skip il commit perchè non ha il parent
+        }
 
         return modifiedClasses;
     }
